@@ -1,0 +1,80 @@
+#!/bin/bash
+
+# Define the target IP address or range
+read -p "Enter the target IP address or range: " target
+
+# Define the output directory for CSV files
+csv_dir="./nmap_csv"
+
+# Create the CSV directory if it doesn't exist
+if [[ ! -d $csv_dir ]]; then
+    mkdir $csv_dir
+fi
+
+# Define the Nmap options for the menu
+nmap_options=("Live hosts scan" "Service version scan" "Firewall detection" "Host detection" "HTTP vulnerability scan" "Exit")
+
+# Define the function to handle the live hosts scan
+function live_hosts_scan() {
+    nmap -sn "$target" -oX "$csv_dir/live_hosts.xml"
+    python3 xml2csv.py "$csv_dir/live_hosts.xml" "$csv_dir/live_hosts.csv"
+}
+
+# Define the function to handle the service version scan
+function service_version_scan() {
+    nmap -sV "$target" -oX "$csv_dir/service_version.xml"
+    python3 xml2csv.py "$csv_dir/service_version.xml" "$csv_dir/service_version.csv"
+}
+
+# Define the function to handle the firewall detection scan
+function firewall_detection_scan() {
+    nmap -sA "$target" -oX "$csv_dir/firewall_detection.xml"
+    python3 xml2csv.py "$csv_dir/firewall_detection.xml" "$csv_dir/firewall_detection.csv"
+}
+
+# Define the function to handle the host detection scan
+function host_detection_scan() {
+    nmap -O "$target" -oX "$csv_dir/host_detection.xml"
+    python3 xml2csv.py "$csv_dir/host_detection.xml" "$csv_dir/host_detection.csv"
+}
+
+# Define the function to handle the HTTP vulnerability scan
+function http_vuln_scan() {
+    nmap --script http-vuln* "$target" -oX "$csv_dir/http_vuln.xml"
+    python3 xml2csv.py "$csv_dir/http_vuln.xml" "$csv_dir/http_vuln.csv"
+}
+
+# Loop over the Nmap options until the user chooses to exit
+while true; do
+    echo "Choose an option:"
+    select option in "${nmap_options[@]}"; do
+        case $option in
+            "Live hosts scan")
+                live_hosts_scan
+                break
+                ;;
+            "Service version scan")
+                service_version_scan
+                break
+                ;;
+            "Firewall detection")
+                firewall_detection_scan
+                break
+                ;;
+            "Host detection")
+                host_detection_scan
+                break
+                ;;
+            "HTTP vulnerability scan")
+                http_vuln_scan
+                break
+                ;;
+            "Exit")
+                exit
+                ;;
+            *)
+                echo "Invalid option"
+                ;;
+        esac
+    done
+done

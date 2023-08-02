@@ -1,0 +1,50 @@
+#!/bin/bash
+
+menus_directory="/usr/local/bin/omnisint/menus"
+
+# Check if the menus directory exists
+if [ ! -d "$menus_directory" ]; then
+  echo "Error: Menus directory not found: $menus_directory"
+  exit 1
+fi
+
+# Get a list of Bash scripts in the menus directory
+menu_scripts=("$menus_directory"/*.sh)
+
+# Check if any menu scripts were found
+if [ ${#menu_scripts[@]} -eq 0 ]; then
+  echo "Error: No menu scripts found in $menus_directory"
+  exit 1
+fi
+
+# Function to display the main menu
+show_main_menu() {
+  echo "===== Main Menu ====="
+  echo "Select an option:"
+  for (( i = 0; i < ${#menu_scripts[@]}; i++ )); do
+    script_name=$(basename "${menu_scripts[$i]}")
+    echo "$((i + 1)). $script_name"
+  done
+  echo "q. Quit"
+  read -p "Enter your choice: " choice
+  process_choice "$choice"
+}
+
+# Function to execute the selected script
+process_choice() {
+  choice="$1"
+  if [[ "$choice" == "q" || "$choice" == "Q" ]]; then
+    echo "Goodbye!"
+    exit 0
+  elif [[ "$choice" -gt 0 && "$choice" -le ${#menu_scripts[@]} ]]; then
+    selected_script="${menu_scripts[$((choice - 1))]}"
+    echo "Executing: $selected_script"
+    bash "$selected_script"
+  else
+    echo "Invalid choice. Please try again."
+  fi
+  show_main_menu
+}
+
+# Show the main menu initially
+show_main_menu

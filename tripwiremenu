@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Function to initialize Tripwire
+init_tripwire() {
+    sudo tripwire --init
+}
+
+# Function to perform an audit with Tripwire
+audit_tripwire() {
+    sudo tripwire --check
+}
+
+# Function to view Tripwire audit reports
+view_reports() {
+    sudo tripwire --print-report | less
+}
+
+# Main menu
+while true; do
+    echo "=== Tripwire Shell Script Menu ==="
+    echo "1. Initialize Tripwire"
+    echo "2. Perform Tripwire Audit"
+    echo "3. View Tripwire Reports"
+    echo "4. Exit"
+
+    read -p "Enter your choice (1-4): " choice
+
+    case $choice in
+        1) init_tripwire ;;
+        2) audit_tripwire ;;
+        3) view_reports ;;
+        4) echo "Exiting..."; break ;;
+        *) echo "Invalid choice. Please enter a valid option (1-4)." ;;
+    esac
+
+    echo
+done
+
+

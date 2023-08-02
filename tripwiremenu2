@@ -1,0 +1,108 @@
+#!/bin/bash
+
+# Function to manage Tripwire configuration and policy files using twadmin
+twadmin_menu() {
+    while true; do
+        echo "=== Tripwire twadmin Menu ==="
+        echo "1. Create Tripwire Configuration File"
+        echo "2. Create Tripwire Policy File"
+        echo "3. Print Tripwire Configuration File"
+        echo "4. Print Tripwire Policy File"
+        echo "5. Create Tripwire Key File"
+        echo "6. Back to Main Menu"
+
+        read -p "Enter your choice (1-6): " choice
+
+        case $choice in
+            1) twadmin --create-cfgfile ;;
+            2) twadmin --create-polfile ;;
+            3) twadmin --print-cfgfile ;;
+            4) twadmin --print-polfile ;;
+            5) twadmin --create-keyfile ;;
+            6) break ;;
+            *) echo "Invalid choice. Please enter a valid option (1-6)." ;;
+        esac
+
+        echo
+    done
+}
+
+# Function to manage Tripwire using tripwire command
+tripwire_menu() {
+    while true; do
+        echo "=== Tripwire tripwire Menu ==="
+        echo "1. Update Tripwire Policy"
+        echo "2. Generate New Tripwire Database"
+        echo "3. Perform Tripwire Audit"
+        echo "4. Perform Interactive Tripwire Audit"
+        echo "5. Perform Full System Audit"
+        echo "6. Perform Audit with Verbose Output"
+        echo "7. Perform Audit with Specific Report File"
+        echo "8. Update Tripwire Key File"
+        echo "9. Print Tripwire Report"
+        echo "10. Back to Main Menu"
+
+        read -p "Enter your choice (1-10): " choice
+
+        case $choice in
+            1) tripwire --update-policy ;;
+            2) tripwire --update ;;
+            3) tripwire --check ;;
+            4) tripwire --check --interactive ;;
+            5) tripwire --check --check-all ;;
+            6) tripwire --check --verbose ;;
+            7) read -p "Enter the report file name: " report_file
+               tripwire --check --twrfile "$report_file" ;;
+            8) tripwire --update-keyfile ;;
+            9) tripwire --print-report ;;
+            10) break ;;
+            *) echo "Invalid choice. Please enter a valid option (1-10)." ;;
+        esac
+
+        echo
+    done
+}
+
+# Function to manage Tripwire using twprint
+twprint_menu() {
+    while true; do
+        echo "=== Tripwire twprint Menu ==="
+        echo "1. Display Differences between Tripwire Databases"
+        echo "2. Generate Database Report"
+        echo "3. Print Tripwire Databases"
+        echo "4. Back to Main Menu"
+
+        read -p "Enter your choice (1-4): " choice
+
+        case $choice in
+            1) twprint --db-differences ;;
+            2) twprint --db-report ;;
+            3) twprint --print-databases ;;
+            4) break ;;
+            *) echo "Invalid choice. Please enter a valid option (1-4)." ;;
+        esac
+
+        echo
+    done
+}
+
+# Main menu
+while true; do
+    echo "=== Tripwire Shell Script Menu ==="
+    echo "1. Manage Tripwire Configuration (twadmin)"
+    echo "2. Manage Tripwire (tripwire)"
+    echo "3. Display Information from Tripwire Databases (twprint)"
+    echo "4. Exit"
+
+    read -p "Enter your choice (1-4): " choice
+
+    case $choice in
+        1) twadmin_menu ;;
+        2) tripwire_menu ;;
+        3) twprint_menu ;;
+        4) echo "Exiting..."; break ;;
+        *) echo "Invalid choice. Please enter a valid option (1-4)." ;;
+    esac
+
+    echo
+done

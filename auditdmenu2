@@ -1,0 +1,93 @@
+#!/bin/bash
+
+# Function to start the auditd service
+start_auditd() {
+    sudo systemctl start auditd
+    echo "Auditd service started."
+}
+
+# Function to stop the auditd service
+stop_auditd() {
+    sudo systemctl stop auditd
+    echo "Auditd service stopped."
+}
+
+# Function to check the status of the auditd service
+status_auditd() {
+    sudo systemctl status auditd
+}
+
+# Function to enable the auditd service at boot
+enable_auditd() {
+    sudo systemctl enable auditd
+    echo "Auditd service enabled to start at boot."
+}
+
+# Function to initialize auditd
+init_auditd() {
+    sudo auditd
+}
+
+# Function to start auditd in debug mode
+start_debug_auditd() {
+    sudo auditd -d
+}
+
+# Function to start auditd on-demand from launchd (not applicable for Linux)
+start_on_demand_auditd() {
+    echo "This option is not applicable for Linux systems."
+}
+
+# Function to add an audit rule
+add_rule() {
+    read -p "Enter the audit rule (e.g., '-a always,exit -F arch=b64 -S open'): " rule
+    sudo auditctl -a "$rule"
+    echo "Audit rule added: $rule"
+}
+
+# Function to list all audit rules
+list_rules() {
+    sudo auditctl -l
+}
+
+# Function to remove an audit rule
+remove_rule() {
+    read -p "Enter the audit rule you want to remove: " rule
+    sudo auditctl -D "$rule"
+    echo "Audit rule removed: $rule"
+}
+
+# Main menu
+while true; do
+    echo "=== Auditd Shell Script Menu ==="
+    echo "1. Start Auditd Service"
+    echo "2. Stop Auditd Service"
+    echo "3. Check Auditd Service Status"
+    echo "4. Enable Auditd Service at Boot"
+    echo "5. Initialize Auditd"
+    echo "6. Start Auditd in Debug Mode"
+    echo "7. Start Auditd on-demand (N/A for Linux)"
+    echo "8. Add Audit Rule"
+    echo "9. List Audit Rules"
+    echo "10. Remove Audit Rule"
+    echo "11. Exit"
+
+    read -p "Enter your choice (1-11): " choice
+
+    case $choice in
+        1) start_auditd ;;
+        2) stop_auditd ;;
+        3) status_auditd ;;
+        4) enable_auditd ;;
+        5) init_auditd ;;
+        6) start_debug_auditd ;;
+        7) start_on_demand_auditd ;;
+        8) add_rule ;;
+        9) list_rules ;;
+        10) remove_rule ;;
+        11) echo "Exiting..."; break ;;
+        *) echo "Invalid choice. Please enter a valid option (1-11)." ;;
+    esac
+
+    echo
+done

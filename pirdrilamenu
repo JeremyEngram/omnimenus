@@ -1,0 +1,9 @@
+cd pidrila
+python3 pidrila.py -u <URL>
+
+
+python3 ./pidrila.py -u http://silenthouse.yoba -M 128
+
+python3 ./pidrila.py -u http://zqktlwi4fecvo6ro.onion -m 16 -M 16 --proxy=socks5h://127.0.0.1:9
+
+python3 ./pidrila.py -m 2048 -L darkweb_sites_list.txt --user-agent "Pantusha/2.0 (4.2BSD)"

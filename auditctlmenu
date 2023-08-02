@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# Function to add an audit rule
+add_rule() {
+    read -p "Enter the audit rule (e.g., '-a always,exit -F arch=b64 -S open'): " rule
+    auditctl -a "$rule"
+    echo "Audit rule added: $rule"
+}
+
+# Function to list all audit rules
+list_rules() {
+    auditctl -l
+}
+
+# Function to remove an audit rule
+remove_rule() {
+    read -p "Enter the audit rule you want to remove: " rule
+    auditctl -D "$rule"
+    echo "Audit rule removed: $rule"
+}
+
+# Main menu
+while true; do
+    echo "Auditctl Menu"
+    echo "1. Add Audit Rule"
+    echo "2. List Audit Rules"
+    echo "3. Remove Audit Rule"
+    echo "4. Exit"
+
+    read -p "Enter your choice (1/2/3/4): " choice
+
+    case $choice in
+        1)
+            add_rule
+            ;;
+        2)
+            list_rules
+            ;;
+        3)
+            remove_rule
+            ;;
+        4)
+            echo "Exiting..."
+            break
+            ;;
+        *)
+            echo "Invalid choice. Please select a valid option (1/2/3/4)."
+            ;;
+    esac
+
+    echo
+done
+

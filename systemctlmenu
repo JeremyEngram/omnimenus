@@ -1,0 +1,49 @@
+#!/bin/bash
+
+printf '
+	#############
+	SYSTEMCTLMENU
+	#############
+';
+
+# Prompt user to enter service name
+echo "Enter the name of the service you want to manage:"
+read service_name
+
+# Prompt user to select an action to perform
+echo "Enter the action you want to perform for $service_name (start/stop/enable/restart):"
+read action
+
+# Check if the service exists
+if systemctl status $service_name &> /dev/null; then
+
+  # Perform the selected action on the service
+  case $action in
+    start)
+      systemctl start $service_name
+      ;;
+    stop)
+      systemctl stop $service_name
+      ;;
+    enable)
+      systemctl enable $service_name
+      ;;
+    restart)
+      systemctl restart $service_name
+      ;;
+    *)
+      echo "Invalid action. Please enter start, stop, enable, or restart."
+      exit 1
+      ;;
+  esac
+
+  # Output the service status after the action is performed
+  echo "$service_name is now $(systemctl is-active $service_name)."
+
+else
+  echo "Service $service_name does not exist."
+  exit 1
+fi
+
+exit 0
+
